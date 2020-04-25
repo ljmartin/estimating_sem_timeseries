@@ -7,7 +7,7 @@ import pandas as pd
 ##setup search parameters:
 timeseries_lengths = np.array([30,100,300,1000,3000])
 timeseries_rhos = np.array([0.1, 0.3, 0.5, 0.7, 0.9])
-numrpts = 1
+numrpts = 100
 
 
 ##setup names and estimation functions
