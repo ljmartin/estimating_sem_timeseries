@@ -14,11 +14,10 @@ logger.setLevel(logging.ERROR)
 
 ####Generating correlated curves:
 def gen_correlated_curve(ac, num=100):
-    num_with_runup = num+5000
-    y = np.zeros((num_with_runup,))
-    for i in range(1,num_with_runup):
+    y = np.zeros((num,))
+    for i in range(1,num):
         y[i] = ac * y[i-1] + np.random.normal()
-    return y[-num:]
+    return y
 
 
 ####Block averaging:
