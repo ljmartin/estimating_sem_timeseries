@@ -20,7 +20,7 @@ method_functions = [sem_utils.sem_from_independent,
                     sem_utils.sem_from_bayesian_estimation]
 
 ##setup df to store the results (we are using long format here due to the complicated structure of the search grid)
-df = pd.DataFrame(columns=['methodName', 'trueRho', 'timeSeriesLength', 'estMean', 'mean_low', 'mean_high'])
+df = pd.DataFrame(columns=['methodName', 'trueRho', 'timeSeriesLength', 'estMean', 'SEM'])
 row_num = 0
 
 ##do the measurements:
@@ -31,8 +31,8 @@ for rho in timeseries_rhos:
             estimated_mean = timeseries.mean()
             
             for methodName, function in zip(method_names, method_functions):
-                mean_low, mean_high = function(timeseries)
-                results = [methodName, rho, datasize, estimated_mean, mean_low, mean_high]
+                sem = function(timeseries)
+                results = [methodName, rho, datasize, estimated_mean, sem]
                 print(results)
                 df.loc[row_num] = results
                 row_num += 1

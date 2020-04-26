@@ -10,6 +10,8 @@ import logging
 logger = logging.getLogger('pymc3')
 logger.setLevel(logging.ERROR)
 
+##This is for returning 95% CIs:
+z95 = 1.959963984540054
 
 
 ####Generating correlated curves:
@@ -20,6 +22,11 @@ def gen_correlated_curve(ac, num=100):
         y[i] = ac * y[i-1] + np.random.normal()
     return y[-num:]
 
+####This returns the CI based on an SEM that assumes independent data (not correlated data)
+def sem_from_independent(timeseries):
+    sem = stats.sem(timeseries)
+    return [timeseries.mean()-sem*z95, timeseries.mean()+sem*z95]
+    
 
 ####Block averaging:
 def block_averaging(corr):
@@ -44,7 +51,9 @@ def sem_from_blockAveraging(timeseries):
     blocked_sems = block_averaging(timeseries)
     popt = fit_arctan(blocked_sems)
     #asymptote of the arctan curve:
-    return popt[0] *np.pi/2
+    sem = popt[0] *np.pi/2
+    #now generate a CI:
+    return [timeseries.mean()-sem*z95, timeseries.mean()+sem*z95]
 
 
 ####Techniques that estimate n_eff:
@@ -88,19 +97,20 @@ def statistical_inefficiency(corr, mintime=3):
     g = 1.0 + g_t[1:ind].sum()
     return max(1.0, g)
 
-
  #and these actually return the values for SEM:
 def sem_from_chodera(timeseries):
     autocorrelation_time = statistical_inefficiency(timeseries)
     n = len(timeseries)
+    #calculate SEM and return CI:
     sem = np.std(timeseries) / np.sqrt(n/autocorrelation_time)
-    return sem
+    return [timeseries.mean()-sem*z95, timeseries.mean()+sem*z95]
 
 def sem_from_sokal(timeseries):
     autocorrelation_time = sokal_autocorr_time(timeseries)
     n = len(timeseries)
+    #calculate SEM and return a CI:
     sem= np.std(timeseries) / np.sqrt(n/autocorrelation_time)
-    return sem
+    return [timeseries.mean()-sem*z95, timeseries.mean()+sem*z95]
 
 
 ####Using statsmodels to fit an AR(1) process, thereby estimate rho and use a correction factor:
@@ -116,8 +126,9 @@ def sem_from_autoregressive_correction(timeseries):
     n=len(timeseries)
     correction = correction_factor(estimated_rho, n)
     naive_sem = stats.sem(timeseries)
-    corrected_sem = naive_sem*correction
-    return corrected_sem
+    #calculate SEM and return CI:
+    sem = naive_sem*correction
+    return [timeseries.mean()-sem*z95, timeseries.mean()+sem*z95]
 
 #### Bayesian estimation using PyMC3
 def bayes_ar_one_model(corr, progress=False):
@@ -131,9 +142,12 @@ def bayes_ar_one_model(corr, progress=False):
 
 def sem_from_bayesian_estimation(timeseries, progress=False):
     trace = bayes_ar_one_model(timeseries, progress=progress)
-    hpd = pm.stats.hpd(trace['center'])
-    hpd_sem = (hpd[1]-hpd[0]/2)/1.96
-    return hpd_sem
+    hpd = pm.stats.hpd(trace['center'],credible_interval=0.95)
+    #this averages the hpd into a SEM. May not be as accurate.
+    #hpd_sem = (hpd[1]-hpd[0]/2)/1.96
+    #return hpd_sem
+    ##this returns the exact HPD:
+    return [hpd[0], hpd[1]]
 
 
 
