@@ -8,7 +8,7 @@
 import altair as alt
 import pandas as pd
 import numpy as np
-
+np.seterr(divide='ignore', invalid='ignore')
 
 z95 = 1.959963984540054
 results = pd.read_csv('sem_results.csv', index_col=0)
