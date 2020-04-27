@@ -4,9 +4,11 @@ import numpy as np
 import pandas as pd
 
 
+np.random.seed(457840)
+
 ##setup search parameters:
 timeseries_lengths = np.array([30,100,300,1000,3000])
-timeseries_rhos = np.array([0.1, 0.3, 0.5, 0.7, 0.9])
+timeseries_rhos = np.array([0.1, 0.3, 0.5, 0.7, 0.9, 0.99])
 numrpts = 100
 
 
