@@ -25,7 +25,7 @@ def gen_correlated_curve(ac, num=100):
 ####This returns the CI based on an SEM that assumes independent data (not correlated data)
 def sem_from_independent(timeseries):
     sem = stats.sem(timeseries)
-    return [timeseries.mean()-sem*z95, timeseries.mean()+sem*z95]
+    return timeseries.mean()-sem*z95, timeseries.mean()+sem*z95
     
 
 ####Block averaging:
@@ -53,7 +53,7 @@ def sem_from_blockAveraging(timeseries):
     #asymptote of the arctan curve:
     sem = popt[0] *np.pi/2
     #now generate a CI:
-    return [timeseries.mean()-sem*z95, timeseries.mean()+sem*z95]
+    return timeseries.mean()-sem*z95, timeseries.mean()+sem*z95
 
 
 ####Techniques that estimate n_eff:
@@ -103,14 +103,14 @@ def sem_from_chodera(timeseries):
     n = len(timeseries)
     #calculate SEM and return CI:
     sem = np.std(timeseries) / np.sqrt(n/autocorrelation_time)
-    return [timeseries.mean()-sem*z95, timeseries.mean()+sem*z95]
+    return timeseries.mean()-sem*z95, timeseries.mean()+sem*z95
 
 def sem_from_sokal(timeseries):
     autocorrelation_time = sokal_autocorr_time(timeseries)
     n = len(timeseries)
     #calculate SEM and return a CI:
     sem= np.std(timeseries) / np.sqrt(n/autocorrelation_time)
-    return [timeseries.mean()-sem*z95, timeseries.mean()+sem*z95]
+    return timeseries.mean()-sem*z95, timeseries.mean()+sem*z95
 
 
 ####Using statsmodels to fit an AR(1) process, thereby estimate rho and use a correction factor:
@@ -128,7 +128,7 @@ def sem_from_autoregressive_correction(timeseries):
     naive_sem = stats.sem(timeseries)
     #calculate SEM and return CI:
     sem = naive_sem*correction
-    return [timeseries.mean()-sem*z95, timeseries.mean()+sem*z95]
+    return timeseries.mean()-sem*z95, timeseries.mean()+sem*z95
 
 #### Bayesian estimation using PyMC3
 def bayes_ar_one_model(corr, progress=False):
@@ -147,7 +147,7 @@ def sem_from_bayesian_estimation(timeseries, progress=False):
     #hpd_sem = (hpd[1]-hpd[0]/2)/1.96
     #return hpd_sem
     ##this returns the exact HPD:
-    return [hpd[0], hpd[1]]
+    return hpd[0], hpd[1]
 
 
 

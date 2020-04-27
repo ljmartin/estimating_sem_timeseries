@@ -6,6 +6,8 @@ import statsmodels.api as sm
 from statsmodels.tsa.ar_model import AutoReg
 
 import pymc3 as pm
+from fixedAutoregressive import fixedAR1
+
 import logging
 logger = logging.getLogger('pymc3')
 logger.setLevel(logging.ERROR)
@@ -136,7 +138,7 @@ def bayes_ar_one_model(corr, progress=False):
         k_ = pm.Uniform('k',-1,1) #we assume process is stationary, so -1<k_<1 
         tau_ = pm.Gamma('tau',mu=1,sd=1)
         center = pm.Normal('center', mu=corr.mean(), sigma=5) #set the prior for the true mean to be centred on the population mean
-        likelihood = pm.AR1('likelihood', k=k_, tau_e=tau_, observed=corr-center)
+        likelihood = fixedAR1('likelihood', k=k_, tau_e=tau_, observed=corr-center)
         trace = pm.sample(progressbar=progress)
     return trace
 
