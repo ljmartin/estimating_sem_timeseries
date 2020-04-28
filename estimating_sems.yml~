@@ -1,4 +1,4 @@
-name: lew_conda
+name: estimating_sems
 channels:
   - conda-forge
 dependencies:

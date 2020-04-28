@@ -6,5 +6,7 @@ dependencies:
   - scipy
   - pymc3
   - jupyter
+  - statsmodels
+  - pandas
   - altair
   - altair_saver
