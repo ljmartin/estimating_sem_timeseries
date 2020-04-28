@@ -14,7 +14,7 @@ Feel free to drop a note in the issues if you'd like to see other techniques com
 
 
 
-The judgement of which technique is best is of course subjective, and if you know what you're doing then all techniques perform equivalently. If you're not quite sure what you're doing, or not sure if you have enough data compared to the level of autocorrelation, Bayesian estimation using an autoregressive AR(1) model will save you most of the time by factoring in uncertainty. 
+The judgement of which technique is best is of course subjective, and if you already know how and when to apply a given approach, they should perform about equivalently. If you're not quite sure what you're doing, or even better you're not sure if you have collected enough data compared to the level of autocorrelation, Bayesian estimation using an autoregressive AR(1) model will save you most of the time by factoring in that uncertainty. 
 
 
 
