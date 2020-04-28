@@ -47,18 +47,20 @@ save(chart, 'results_ci.svg')
 
 
 
-At the highest autocorrelation, ρ=0.99, all techniques struggle. The reason can be seen below. As the ρ parameter increases, the 'integrated autocorrelation time' also increases. Autocorrelation time is the amoutn of time for a process to 'forget' itself. Another way of seeing it is the time taken to collect one independent sample. Ideally you can sample for many multiples of this time, and as shown below all techniques struggle when they only have less than about 2 autocorrelation times. 
+
+
+At the highest autocorrelation, ρ=0.99, all techniques struggle. The reason can be seen below. As the ρ parameter increases, the 'integrated autocorrelation time' also increases. Autocorrelation time is the amount of time for a process to 'forget' itself. Another way of seeing it is the time taken to collect one independent sample. Ideally you can sample for many multiples of this time, and as shown below all techniques struggle when they only have less than about 2 autocorrelation times. 
 
 ```
 chart = plot_utils.plot_results_timeconstant_static()
-save(chart, 'results_ci.svg')
+save(chart, 'results_tau.svg')
 ```
 
 ![title](./results_tau.svg)
 
 
 
-If your process is very highly autocorrelated, all is not lost. Here it's helpful to use Bayesian estimation - even in cases of high autocorrelation (ρ=0.99) and super low data (30 measurements), which is only ~0.1-0.2 of the autocorrelation time (!), estimates for the ρ parameter include 0.99, indicating to you that more data will be required. The downside is that you would probably need at least two orders of magnitude more data (at least 3000 measurements).
+If your process is very highly autocorrelated, all is not lost. In this case it's helpful to fit either a Bayesian or maximum likelihood AR(1) model - even in cases of high autocorrelation (ρ=0.99) and super low data (30 measurements), which is only ~0.1-0.2 of the autocorrelation time (!), ranges for the estimated ρ parameter include 0.99, indicating to you that more data will be required. The downside is that you would probably need at least two orders of magnitude more data - spanning at least 3000 timesteps.
 
 
 
