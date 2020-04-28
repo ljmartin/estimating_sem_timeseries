@@ -20,12 +20,13 @@ The judgement of which technique is best is of course subjective, and if you kno
 
 # Results
 
-The results show how often the 95% confidence interval actually includes the true mean for each method.   `compare_methods.py` will run a grid comparison of 100 timeseries simulations across several different lengths (`half-log increases of 30, 100, 300, 1000, 3000 timesteps`) combined with several different levels of autocorrelation (`rho parameter 0.1, 0.3, 0.5, 0.7, 0.9, 0.99`). `plot_utils.py` uses the Altair library to produce the figures below. 
+The results show how often the 95% confidence interval actually includes the true mean for each method.   `compare_methods.py` will run a grid comparison of 100 timeseries simulations across several different lengths (`half-log increases of 30, 100, 300, 1000, 3000 timesteps`) combined with several different levels of autocorrelation (`ρ (rho) parameter 0.1, 0.3, 0.5, 0.7, 0.9, 0.99`). `plot.py` uses the Altair library to produce the figures below. 
 
 i.e.:
 
 ```
 python compare_methods.py
+python plot.py
 ```
 
 
@@ -34,7 +35,7 @@ python compare_methods.py
 
 ## Accuracy of the SEM estimate
 
-At low autocorrelation (ρ = 0.1) all methods get close to the desired 95% rate, except for the Sokal technique, which is intended for longer series from MCMC. This autocorrelation is so low that you would see it in white noise (which is independent) anyway, meaning the naive SEM also perforoms fine. As ρ increases, naive SEM gets worse and other techniques start to drop off. At ρ=0.9, particularly in cases of small number (<300) of measurements, most techniques except Bayesian estimation struggle. 
+At low autocorrelation (ρ = 0.1) all methods get close to the desired 95% rate except for the Sokal technique, which is intended for longer series from MCMC runs. This autocorrelation is so low that you would see it in white noise (which is independent) anyway, meaning the naive SEM also perforoms fine. As ρ increases, naive SEM gets worse and other techniques start to drop off. At ρ=0.9, particularly in cases of small number (n<300) of measurements, most techniques except Bayesian estimation struggle. 
 
 
 ```python
@@ -49,7 +50,7 @@ save(chart, 'results_ci.svg')
 
 
 
-At the highest autocorrelation, ρ=0.99, all techniques struggle. The reason can be seen below. As the ρ parameter increases, the 'integrated autocorrelation time' also increases. Autocorrelation time is the amount of time for a process to 'forget' itself. Another way of seeing it is the time taken to collect one independent sample. Ideally you can sample for many multiples of this time, and as shown below all techniques struggle when they only have less than about 2 autocorrelation times. 
+At the highest autocorrelation, ρ=0.99, all techniques struggle. The reason can be seen below. As the ρ parameter increases, the 'integrated autocorrelation time' also increases. Autocorrelation time is the amount of time for a process to 'forget' itself. Another way of seeing it is the time taken to collect one independent sample. Ideally you can sample for many multiples of this time. As shown below, high autocorrelation means we only sampled very small numbers of autocorrelation times. All techniques struggle when they only have less than about 2 autocorrelation times. 
 
 ```
 chart = plot_utils.plot_results_timeconstant_static()
@@ -66,7 +67,7 @@ If your process is very highly autocorrelated, all is not lost. In this case it'
 
 # Reproduce this data
 
-Use the provided conda environment yml file and python scripts. Full replication requires this in a bash shell:
+Use the provided python scripts and conda environment file to install the required packages. Full replication requires this in a bash shell:
 
 ```
 conda env create -f estimating_sems.yml
