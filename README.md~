@@ -13,4 +13,4 @@ chart = plot_utils.plot_results_static()
 save(chart, 'chart.png')
 ```
 
-![title](./chart.svg)
+![title](./chart.png)

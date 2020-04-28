@@ -1,0 +1,10 @@
+name: estimating_sems
+channels:
+  - conda-forge
+dependencies:
+  - numpy
+  - scipy
+  - pymc3
+  - jupyter
+  - altair
+  - altair_saver
