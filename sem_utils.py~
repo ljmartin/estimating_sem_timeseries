@@ -28,10 +28,6 @@ def gen_correlated_curve(ac, num=100):
 def sem_from_independent(timeseries):
     sem = stats.sem(timeseries)
     return timeseries.mean()-sem*z95, timeseries.mean()+sem*z95
-
-def ci_from_independent(timeseries):
-    sem = sem_from_independent(timeseries)
-    return timeseries.mean()-sem*z95, timeseries.mean()+sem*z95
     
 
 ####Block averaging:
@@ -52,6 +48,7 @@ def fit_arctan(blocked_SEMs):
     popt, pcov = optimize.curve_fit(arctan_function, np.arange(len(blocked_SEMs)), np.array(blocked_SEMs), maxfev=20000)
     return popt
 
+#return the SEM:
 def sem_from_blockAveraging(timeseries):
     blocked_sems = block_averaging(timeseries)
     popt = fit_arctan(blocked_sems)
@@ -157,7 +154,7 @@ def bayes_ar_one_model(corr, progress=False):
         tau_ = pm.Gamma('tau',mu=1,sd=1)
         center = pm.Normal('center', mu=corr.mean(), sigma=5) #set the prior for the true mean to be centred on the population mean
         likelihood = fixedAR1('likelihood', k=k_, tau_e=tau_, observed=corr-center)
-        trace = pm.sample(progressbar=progress, target_accept=0.9)
+        trace = pm.sample(progressbar=progress)
     return trace
 
 def hpd_from_bayesian_estimation(timeseries, progress=False):

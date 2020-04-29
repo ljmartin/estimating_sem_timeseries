@@ -14,12 +14,12 @@ numrpts = 100
 
 ##setup names and estimation functions
 method_names = ['Naive', 'BlockAveraging', 'Chodera', 'Sokal', 'AR1_correction', 'AR1_Bayes']
-method_functions = [sem_utils.ci_from_independent,
-                    sem_utils.ci_from_blockAveraging,
-                    sem_utils.ci_from_chodera,
-                    sem_utils.ci_from_sokal, 
-                    sem_utils.ci_from_autoregressive_correction,
-                    sem_utils.hpd_from_bayesian_estimation]
+method_functions = [sem_utils.sem_from_independent,
+                    sem_utils.sem_from_blockAveraging,
+                    sem_utils.sem_from_chodera,
+                    sem_utils.sem_from_sokal, 
+                    sem_utils.sem_from_autoregressive_correction,
+                    sem_utils.sem_from_bayesian_estimation]
 
 ##setup df to store the results (we are using long format here due to the complicated structure of the search grid)
 df = pd.DataFrame(columns=['methodName', 'trueRho', 'timeSeriesLength', 'estMean', 'mean_low', 'mean_high'])
