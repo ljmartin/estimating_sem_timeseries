@@ -27,7 +27,7 @@ def gen_correlated_curve(ac, num=100):
 ####This returns the CI based on an SEM that assumes independent data (not correlated data)
 def sem_from_independent(timeseries):
     sem = stats.sem(timeseries)
-    return timeseries.mean()-sem*z95, timeseries.mean()+sem*z95
+    return sem
 
 def ci_from_independent(timeseries):
     sem = sem_from_independent(timeseries)
